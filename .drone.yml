@@ -1,0 +1,49 @@
+kind: pipeline
+type: exec
+name: dockercompose
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: "build-and-run"
+    commands:
+      - export DOCKER_BUILDKIT=1
+      - export COMPOSE_DOCKER_CLI_BUILD=1
+      - docker compose build --build-arg BUILDKIT_INLINE_CACHE=1
+      - docker compose up -d
+
+  - name: "copy-nginx-conf"
+    commands:
+      - cp -r nginx/* /docker/nginx/data/conf.d/
+
+  - name: "validate-nginx"
+    commands:
+      - |
+        if docker exec nginx nginx -t -c /etc/nginx/nginx.conf; then
+          echo "✅ Nginx configuration is valid"
+        else
+          echo "❌ Nginx configuration test failed"
+          docker exec nginx rm /etc/nginx/conf.d/hypy_front.conf
+          exit 1
+        fi
+
+  - name: "reload-nginx"
+    commands:
+      - docker exec nginx nginx -s reload
+    when:
+      status:
+        - success
+
+volumes:
+  - name: docker-cache
+    host:
+      path: /tmp/docker-cache
+
+trigger:
+  branch:
+    - master
+  event:
+    - push
+

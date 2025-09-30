@@ -9,7 +9,7 @@ export function FooterSection() {
 			<div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8">
 				<div className="space-y-2">
 					<div className="text-sm text-muted-foreground">© {year} Hossein Yaghoubi. All rights reserved.</div>
-					<div className="text-xs text-muted-foreground">Built with v0.dev by Felix Macaspac</div>
+					<div className="text-xs text-muted-foreground">Built with Nextjs and Shadcdn</div>
 				</div>
 
 				<div className="flex items-center gap-4">

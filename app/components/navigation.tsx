@@ -19,18 +19,18 @@ export function Navigation({ isDark, toggleTheme }: NavigationProps) {
 
           {/* Navigation Links and Theme Toggle */}
           <div className="flex items-center gap-6 sm:gap-8">
-            <Link
+            {/*<Link
               href="#thoughts"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
             >
               Blog
-            </Link>
-            <Link
+            </Link>*/}
+            {/*<Link
               href="#work"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
             >
               Services
-            </Link>
+            </Link>*/}
             <Link
               href="#connect"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"

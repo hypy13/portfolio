@@ -5,7 +5,7 @@ import {useEffect, useRef, useState} from "react"
 import {Navigation} from "@/app/components/navigation"
 import {IntroSection} from "@/app/components/IntroSection"
 import {WorkSection} from "@/app/components/WorkSection"
-import {ThoughtsSection} from "@/app/components/ThoughtsSection"
+import {ProjectsSection} from "@/app/components/ProjectsSection"
 import {ConnectSection} from "@/app/components/ConnectSection"
 import {FooterSection} from "@/app/components/FooterSection"
 import {ResumeProp} from "@/app/types/resume";
@@ -15,6 +15,32 @@ export default function Home() {
 	const [activeSection, setActiveSection] = useState("")
 	const sectionsRef = useRef<(HTMLElement | null)[]>([])
 	const resume: ResumeProp = {
+		projects: [
+			{
+				name: "django daisy",
+				link: 'https://github.com/hypy13/django-daisy/',
+				excerpt: 'A modern django  dashboard built with daisyui ',
+				date: 'Sep 2024'
+			},
+			{
+				name: "HabibApp",
+				link: 'https://habibapp.com',
+				excerpt: 'super application with services for everybody',
+				date: 'Jan 2021'
+			},
+			{
+				name: "RomanExplore",
+				link: 'https://romanexplore.com/',
+				excerpt: 'tour guiding and programmes in rom',
+				date: 'Dec 2024'
+			},
+			{
+				name: "Fundiran",
+				link: 'https://fundiran.net/',
+				excerpt: 'platform for investors and investees',
+				date: 'Sep 2023'
+			},
+		],
 		links: [
 			{handle: "@hypy13", name: "Github", url: "https://github.com/hypy13/"},
 			{handle: "@yaghoubi76", name: "Linkedin", url: "https://www.linkedin.com/in/yaghoubi76/"},
@@ -87,7 +113,7 @@ export default function Home() {
 
 			<nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
 				<div className="flex flex-col gap-4">
-					{["intro", "work", "thoughts", "connect"].map((section, idx) => (
+					{["intro", "work", "projects", "connect"].map((section, idx) => (
 						<button
 							key={section}
 							onClick={() => document.getElementById(section)?.scrollIntoView({behavior: "smooth"})}
@@ -103,7 +129,7 @@ export default function Home() {
 			<main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 pt-16">
 				<IntroSection sectionRef={(el) => (sectionsRef.current[0] = el)} resume={resume}/>
 				<WorkSection sectionRef={(el) => (sectionsRef.current[1] = el)} resume={resume}/>
-				<ThoughtsSection sectionRef={(el) => (sectionsRef.current[2] = el)} resume={resume}/>
+				<ProjectsSection sectionRef={(el) => (sectionsRef.current[2] = el)} resume={resume}/>
 				<ConnectSection sectionRef={(el) => (sectionsRef.current[3] = el)} resume={resume}/>
 				<FooterSection/>
 			</main>
