@@ -22,12 +22,12 @@ export default function Home() {
 				excerpt: 'A modern django  dashboard built with daisyui ',
 				date: 'Sep 2024'
 			},
-			{
-				name: "HabibApp",
-				link: 'https://habibapp.com',
-				excerpt: 'super application with services for everybody',
-				date: 'Jan 2021'
-			},
+			// {
+			// 	name: "HabibApp",
+			// 	link: 'https://habibapp.com',
+			// 	excerpt: 'super application with services for everybody',
+			// 	date: 'Jan 2021'
+			// },
 			{
 				name: "RomanExplore",
 				link: 'https://romanexplore.com/',
