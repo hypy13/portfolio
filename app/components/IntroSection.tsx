@@ -48,7 +48,7 @@ export function IntroSection({sectionRef, resume}: IntroSectionProps) {
 								<div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
 								Available for work
 							</div>
-							<div>Iran</div>
+							<div>Remote</div>
 						</div>
 					</div>
 				</div>
