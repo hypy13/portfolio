@@ -8,9 +8,7 @@ const nextConfig = {
     images: {
         unoptimized: true,
     },
-    turbopack: {
-        root: "/home/hossein/Documents/projects/hypy-frontend/"
-    },
+
     output: 'standalone',
 }
 

@@ -11,7 +11,6 @@ import {FooterSection} from "@/app/components/FooterSection"
 import {ResumeProp} from "@/app/types/resume";
 
 export default function Home() {
-	const [isDark, setIsDark] = useState(true)
 	const [activeSection, setActiveSection] = useState("")
 	const sectionsRef = useRef<(HTMLElement | null)[]>([])
 	const resume: ResumeProp = {
@@ -22,12 +21,12 @@ export default function Home() {
 				excerpt: 'A modern django  dashboard built with daisyui ',
 				date: 'Sep 2024'
 			},
-			// {
-			// 	name: "HabibApp",
-			// 	link: 'https://habibapp.com',
-			// 	excerpt: 'super application with services for everybody',
-			// 	date: 'Jan 2021'
-			// },
+			{
+				name: "HabibApp",
+				link: 'https://habibapp.com',
+				excerpt: 'super application with services for everybody',
+				date: 'Jan 2021'
+			},
 			{
 				name: "RomanExplore",
 				link: 'https://romanexplore.com/',
@@ -80,10 +79,6 @@ export default function Home() {
 	}
 
 	useEffect(() => {
-		document.documentElement.classList.toggle("dark", isDark)
-	}, [isDark])
-
-	useEffect(() => {
 		const observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
@@ -103,13 +98,10 @@ export default function Home() {
 		return () => observer.disconnect()
 	}, [])
 
-	const toggleTheme = () => {
-		setIsDark(!isDark)
-	}
 
 	return (
 		<div className="min-h-screen bg-background text-foreground relative">
-			<Navigation isDark={isDark} toggleTheme={toggleTheme}/>
+			<Navigation/>
 
 			<nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
 				<div className="flex flex-col gap-4">

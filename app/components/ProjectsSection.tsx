@@ -13,7 +13,7 @@ export function ProjectsSection({ sectionRef, resume }: ProjectsSectionProps) {
     <section
       id="projects"
       ref={sectionRef}
-      className="min-h-screen py-20 sm:py-32 opacity-0"
+      className="min-h-screen py-20 sm:py-20 opacity-0"
     >
       {/* ...existing code for thoughts section... */}
       <div className="space-y-12 sm:space-y-16">
