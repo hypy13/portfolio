@@ -29,7 +29,7 @@ export function Navigation() {
               Services
             </Link>*/}
 						<Link
-							href="#connect"
+							href="/#connect"
 							className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
 						>
 							Get in Touch
