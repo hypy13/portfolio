@@ -1,33 +1,34 @@
-// components/ThemeToggle.tsx
 'use client';
 
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ThemeToggle() {
 	const [isDark, setIsDark] = useState<boolean | null>(null);
 
-	// Initialise from localStorage / prefers‑color‑scheme
 	useEffect(() => {
-		const stored = localStorage.getItem('theme');
+		let stored = localStorage.getItem('theme');
 		let dark: boolean;
+
 		if (stored) {
 			dark = stored === 'dark';
 		} else {
-			dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			// 🔥 Default to dark if not set
+			dark = true;
+			localStorage.setItem('theme', 'dark');
 		}
+
 		setIsDark(dark);
-		// No need to toggle document class here; handled in layout.tsx
+		// Ensure document reflects correct theme
+		document.documentElement.classList.toggle('dark', dark);
 	}, []);
 
 	const toggleTheme = () => {
 		const next = !(isDark ?? false);
 		setIsDark(next);
 		localStorage.setItem('theme', next ? 'dark' : 'light');
-		// optional: update document class
 		document.documentElement.classList.toggle('dark', next);
 	};
 
-	// While we don’t know the theme yet, render nothing (or a placeholder)
 	if (isDark === null) return null;
 
 	return (
@@ -54,7 +55,7 @@ export default function ThemeToggle() {
 					fill="currentColor"
 					viewBox="0 0 20 20"
 				>
-					<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+					<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
 				</svg>
 			)}
 		</button>
