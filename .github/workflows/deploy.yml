@@ -58,8 +58,8 @@ jobs:
             
             # Pull latest changes
             echo "🔄 Updating code..."
-            git fetch origin main
-            git reset --hard origin/main
+            git fetch origin master
+            git reset --hard origin/master
             git clean -fd
             
             echo "📝 Deployed: $(git log -1 --oneline)"
