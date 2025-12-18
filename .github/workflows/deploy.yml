@@ -10,8 +10,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  PROJECT_DIR: /home/deploy/projects/${{ github.event.repository.name }}
-
+  PROJECT_DIR: ${{secrets.ROOT_PROJECTS_DIR}}/${{ github.event.repository.name }}
 
 jobs:
   deploy:
@@ -20,69 +19,55 @@ jobs:
     environment: production
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11  # v4.1.1
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@dc588b651fe13675774614f8e6a936a468676387  # v0.9.0
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Add known hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Deploy
-        run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'ENDSSH'
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 20m
+          script_stop: true
+          script: |
             set -e
-            
+
             PROJECT_DIR="${{ env.PROJECT_DIR }}"
-            
-            # Add GitHub to known_hosts on server
-            mkdir -p ~/.ssh
-            if ! grep -q "github.com" ~/.ssh/known_hosts 2>/dev/null; then
-              echo "🔑 Adding GitHub to known_hosts..."
-              ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>/dev/null
-            fi
-            
-            # Clone if not exists
+
             if [ ! -d "$PROJECT_DIR" ]; then
               echo "📦 Cloning repository..."
-              mkdir -p "$(dirname $PROJECT_DIR)"
+              mkdir -p "$(dirname "$PROJECT_DIR")"
               git clone git@github.com:${{ github.repository }}.git "$PROJECT_DIR"
             fi
-            
+
             cd "$PROJECT_DIR"
-            
-            # Pull latest changes
+
             echo "🔄 Updating code..."
             git fetch origin master
             git reset --hard origin/master
             git clean -fd
-            
-            echo "📝 Deployed: $(git log -1 --oneline)"
-            
-            # Deploy with podman
+
+            echo "📝 Deployed commit:"
+            git log -1 --oneline
+
             echo "🚀 Restarting containers..."
             podman-compose down --timeout 30 || true
             podman image prune -f || true
             podman-compose up -d --build --remove-orphans
-            
+
             sleep 5
             podman-compose ps
-            
-            echo "✅ Deployment complete!"
-          ENDSSH
 
-      - name: Summary
+            echo "✅ Deployment complete"
+
+      - name: Deployment summary
         if: always()
         run: |
-          if [ "${{ job.status }}" == "success" ]; then
+          if [ "${{ job.status }}" = "success" ]; then
             echo "### ✅ Deployed Successfully" >> $GITHUB_STEP_SUMMARY
           else
             echo "### ❌ Deployment Failed" >> $GITHUB_STEP_SUMMARY
           fi
           echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Time:** $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "**Time (UTC):** $(date -u)" >> $GITHUB_STEP_SUMMARY
